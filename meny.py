@@ -10,6 +10,7 @@ import logging
 import sqlite3
 import os
 import glob
+import time
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -85,9 +86,10 @@ def start(message):
 @bot.message_handler(func=lambda msg: msg.text == "تسجيل الدخول (إضافة حساب)")
 def login_step_1(message):
     user_id = message.from_user.id
-    user_data[user_id] = {'temp_session_name': f"session_{user_id}_{int(asyncio.get_event_loop().time())}"}
+    # تم تعديل السطر ده لاستخدام time بدل asyncio عشان السيرفر
+    user_data[user_id] = {'temp_session_name': f"session_{user_id}_{int(time.time())}"}
     user_queues[user_id] = queue.Queue()
-    msg = bot.send_message(message.chat.id, "3️⃣ ادخل رقم الهاتف (مثال: +201012345678):")
+    msg = bot.send_message(message.chat.id, "1️⃣ ادخل رقم الهاتف (مثال: +201012345678):")
     bot.register_next_step_handler(msg, start_login_thread)
 
 def start_login_thread(message):
@@ -333,4 +335,5 @@ async def process_transfer(user_id, chat_id):
 
 if __name__ == "__main__":
     print("البوت شغال...")
+    # تم تعديل دي عشان السيرفر ميضربش أخطاء
     bot.polling(non_stop=True, skip_pending=True, timeout=60)
