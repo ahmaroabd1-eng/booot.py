@@ -333,4 +333,4 @@ async def process_transfer(user_id, chat_id):
 
 if __name__ == "__main__":
     print("البوت شغال...")
-    bot.infinity_polling()
+    bot.polling(non_stop=True, skip_pending=True, timeout=60)
